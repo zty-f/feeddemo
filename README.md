@@ -45,24 +45,28 @@ Feed流的分类有很多种，但最常见的分类有两种:
 ## feed流读取分页问题解决
 ![img.png](img.png)
 
-## 项目的优化方案
+项目的优化以及展望
 
+优化：
+代码层优化
+使用go并发编程对于一些代码进行优化（如查询feed流时需要的查询关注状态以及点赞状态可以并发进行）。
+图片: https://yach-doc-shimo.zhiyinlou.com/uploader/f/ljesDfgTAxztBcHL.png?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODk5OTY4MjIsImZpbGVHVUlEIjoiOTEzSlZuYVBOR2MxQjczRSIsImlhdCI6MTY4OTk5NjUyMiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjozNTExNDI5fQ.CtGKQMEWTHYBwB-p7Twe4OC9Mc0A0ePyxdp5ni3-cm4
+使用消息中间件比如（RabbitMQ、Kafka、Pulsar）来对于用户发布feed时异步的将feed推送到粉丝的feed集合中去。
+图片: https://yach-doc-shimo.zhiyinlou.com/uploader/f/KY87cflIOTEWBBhJ.png?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODk5OTY4MjIsImZpbGVHVUlEIjoiOTEzSlZuYVBOR2MxQjczRSIsImlhdCI6MTY4OTk5NjUyMiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjozNTExNDI5fQ.CtGKQMEWTHYBwB-p7Twe4OC9Mc0A0ePyxdp5ni3-cm4
+存储层面优化
 能满足需求的系统主要有两类，一类是阿里云的Tablestore单系统，一类是开源组件组成的组合系统。
-
 开源组件组成的组合系统：包括MySQL、Redis，这些系统单个都不能解决Feed流系统中遇到的问题，需要组合在一起，各司其职才能完成一个Feed流系统，适用于热衷开源系统，人多且喜欢运维操作的团队。
-
-Tablestore单系统：只使用Tablestore单个系统就能解决上述的所有问题，，Tablestore在三年前就已经开始重视Feed流类型业务，
-官方之前也发表过多篇文章介绍，功能上也在专门为Feed流系统特别定制设计，所以到今天，只使用Tablestore一款产品，是可以满足上述需求的。选择Tablestore做Feed流系统的用户具有以下一些特征：
-
-阿里Tablestore是基于阿里盘古分布式文件系统的一个处理大数量的一个产品。
-可以将TableStore的架构简单理解为Lucene + BigTable。
-BigTable解决大数据存储的问题，
+Tablestore单系统：只使用Tablestore单个系统就能解决上述的所有问题。
+阿里Tablestore是基于阿里盘古分布式文件系统的一个处理大数据的一个产品。可以将TableStore的架构简单理解为Lucene + BigTable。
+BigTable解决大数据存储的问题；
 Lucene解决搜索和排序的问题。
-
-
-- 产品设计目标规模大，千万级或亿级。
-- 不喜欢运维，喜欢专注于开发。
-- 高效率团队，希望尽快将产品实现落地。
-- 希望一劳永逸，未来系统随着用户规模增长可以自动扩容。
-- 希望能按量付费，用户少的时候费用低，等用户增长起来后费用在跟随用户数增长。
-- 如果具有上述四个特征的任何一个，那么都是适合于用Tablestore。
+Tablestore在多年前就已经开始重视Feed流类型业务，官方之前也发表过多篇文章介绍，功能上也在专门为Feed流系统特别定制设计，所以到今天，只使用Tablestore一款产品，是可以满足上述需求的。选择Tablestore做Feed流系统的用户具有以下一些特征：
+产品设计目标规模大，千万级或亿级。
+不喜欢运维，喜欢专注于开发。
+高效率团队，希望尽快将产品实现落地。
+希望一劳永逸，未来系统随着用户规模增长可以自动扩容。
+希望能按量付费，用户少的时候费用低，等用户增长起来后费用在跟随用户数增长。
+如果具有上述四个特征的任何一个，那么都是适合于用Tablestore。
+展望：
+希望学app引入好友系统以及学习分享或者直播课程经验分享功能
+引入直播课程或者教课老师点赞、评论等各个提升交互体验功能
